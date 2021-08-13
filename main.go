@@ -5,8 +5,10 @@ import (
 	"log"
 	// "net/http"
 
-	"crowdfunding.com/user"
-	model "crowdfunding.com/user"
+	"crowdfund.com/handler"
+	"crowdfund.com/user"
+	"github.com/gin-gonic/gin"
+
 	// "github.com/gin-gonic/gin"
 
 	"gorm.io/driver/mysql"
@@ -20,10 +22,14 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	userRepository := user.NewRepository(db)
-	user := model.User{
-		Name: "Nurman Ridho",
-	}
+	userRepository	:= user.NewRepository(db)
+	userService		:= user.NewService(userRepository)
+	userHandler		:= handler.NewUserHandler(userService) 
 
-	userRepository.Save(user)
+	router	:= gin.Default()
+	api		:= router.Group("/api/v1")
+
+	api.POST("/users", userHandler.RegisterUser)
+
+	router.Run()
 }
