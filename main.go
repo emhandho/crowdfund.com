@@ -19,9 +19,9 @@ func main() {
 
 	userRepository	:= user.NewRepository(db)
 	userService		:= user.NewService(userRepository)
-	jwtSerice		:= auth.NewJwtService()
+	authService		:= auth.NewJwtService()
 
-	userHandler		:= handler.NewUserHandler(userService, jwtSerice) 
+	userHandler		:= handler.NewUserHandler(userService, authService) 
 
 	router	:= gin.Default()
 	api		:= router.Group("/api/v1")
