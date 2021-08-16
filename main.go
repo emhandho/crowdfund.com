@@ -2,14 +2,10 @@ package main
 
 import (
 	"log"
-	// "net/http"
-
+	"crowdfund.com/auth"
 	"crowdfund.com/handler"
 	"crowdfund.com/user"
 	"github.com/gin-gonic/gin"
-
-	// "github.com/gin-gonic/gin"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -23,7 +19,9 @@ func main() {
 
 	userRepository	:= user.NewRepository(db)
 	userService		:= user.NewService(userRepository)
-	userHandler		:= handler.NewUserHandler(userService) 
+	jwtSerice		:= auth.NewJwtService()
+
+	userHandler		:= handler.NewUserHandler(userService, jwtSerice) 
 
 	router	:= gin.Default()
 	api		:= router.Group("/api/v1")
