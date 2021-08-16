@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -24,9 +25,12 @@ func main() {
 	}
 
 	userRepository	:= user.NewRepository(db)
-	// campaignRepository := campaign.NewRepository(db)
+	campaignRepository := campaign.NewRepository(db)
 
 
+	campaignService := campaign.NewService(campaignRepository)
+	campaigns, _ := campaignService.GetCampaigns(6)
+	fmt.Println(len(campaigns))
 
 	userService		:= user.NewService(userRepository)
 	authService		:= auth.NewJwtService()
