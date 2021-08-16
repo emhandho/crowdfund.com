@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"crowdfund.com/auth"
+	"crowdfund.com/campaign"
 	"crowdfund.com/handler"
 	"crowdfund.com/helper"
 	"crowdfund.com/user"
@@ -23,6 +24,10 @@ func main() {
 	}
 
 	userRepository	:= user.NewRepository(db)
+	// campaignRepository := campaign.NewRepository(db)
+
+
+
 	userService		:= user.NewService(userRepository)
 	authService		:= auth.NewJwtService()
 
