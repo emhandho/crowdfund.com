@@ -1,8 +1,9 @@
 package handler
 
 import (
-	"strconv"
 	"net/http"
+	"strconv"
+
 	"crowdfund.com/campaign"
 	"crowdfund.com/helper"
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,7 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 	}
 
-	response := helper.APIResponse("Successfuly get campaigns", http.StatusOK, "success", campaigns)
+	// fmt.Println(campaigns[0])
+	response := helper.APIResponse("Successfuly get campaigns", http.StatusOK, "success", campaign.FormatCampaigns(campaigns))
 	c.JSON(http.StatusOK, response)
 }
