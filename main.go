@@ -23,24 +23,25 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	userRepository	:= user.NewRepository(db)
+	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
-	userService		:= user.NewService(userRepository)
+	userService := user.NewService(userRepository)
 	campaignService := campaign.NewService(campaignRepository)
-	authService		:= auth.NewJwtService()
+	authService := auth.NewJwtService()
 
-	userHandler		:= handler.NewUserHandler(userService, authService) 
+	userHandler := handler.NewUserHandler(userService, authService)
 	campaignHandler := handler.NewCampaignHandler(campaignService)
 
-	router	:= gin.Default()
+	router := gin.Default()
 	router.Static("/images", "./images")
-	api		:= router.Group("/api/v1")
+	api := router.Group("/api/v1")
 
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
 	api.GET("/campaigns", campaignHandler.GetCampaigns)
+	api.GET("/campaigns/:id", campaignHandler.GetCampaign)
 
 	router.Run()
 }
@@ -55,19 +56,19 @@ func main() {
 func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
-	
+
 		if !strings.Contains(authHeader, "Bearer") {
 			response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
 			return
 		}
-	
+
 		tokenString := ""
 		arrayHeader := strings.Split(authHeader, " ")
 		if len(arrayHeader) == 2 {
-			tokenString = arrayHeader[1]	
+			tokenString = arrayHeader[1]
 		}
-	
+
 		token, err := authService.ValidateToken(tokenString)
 		if err != nil {
 			response := helper.APIResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
@@ -93,5 +94,5 @@ func authMiddleware(authService auth.Service, userService user.Service) gin.Hand
 
 		c.Set("currentUser", user)
 	}
-	
+
 }
