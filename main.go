@@ -9,6 +9,7 @@ import (
 	"crowdfund.com/campaign"
 	"crowdfund.com/handler"
 	"crowdfund.com/helper"
+	"crowdfund.com/payment"
 	"crowdfund.com/transaction"
 
 	// "crowdfund.com/transaction"
@@ -34,9 +35,12 @@ func main() {
 	campaignRepository := campaign.NewRepository(db)
 	campaignService := campaign.NewService(campaignRepository)
 	
+	// create payment service
+	paymentService := payment.NewService()
+
 	// transaction repo and service layer
 	transactionRepository := transaction.NewRepository(db)
-	transacrtionService := transaction.NewService(transactionRepository, campaignRepository)
+	transacrtionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 	
 	// jwt service generator object
 	authService := auth.NewJwtService()
