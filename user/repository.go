@@ -43,7 +43,7 @@ func (r* repository) FindByID(ID int) (User, error) {
 		return user, err
 	}
 
-	return user, err
+	return user, nil
 }
 
 func (r *repository) Update(user User) (User, error) {
