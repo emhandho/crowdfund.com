@@ -64,3 +64,34 @@ func (h *transactionHandler) GetUserTransactions(c *gin.Context) {
 	response := helper.APIResponse("User's transaction", http.StatusOK, "success", transaction.FormatUserTransactions(userTransactions))
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *transactionHandler) CreateTransaction(c *gin.Context) {
+	// input from user amount of payment
+	// handler : catch input then mapping to input struct
+	// call service create transaction
+	// call repository create new transaction data
+	var input transaction.CreateTransactionInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		res := helper.APIResponse("Failed to create transaction.", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, res)
+		return
+	}
+
+	currentUser := c.MustGet("currentUser").(user.User)
+	input.User.ID = currentUser.ID
+
+	newTransaction, err := h.service.CreateTransaction(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to create transaction", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success to create transaction", http.StatusOK, "success", newTransaction)
+	c.JSON(http.StatusOK, response)
+}
