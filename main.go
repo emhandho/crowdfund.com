@@ -15,6 +15,7 @@ import (
 	// "crowdfund.com/transaction"
 	"crowdfund.com/user"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -49,6 +50,7 @@ func main() {
 	transactionHandler := handler.NewTransactionHandler(transacrtionService)
 	
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.Static("/images", "./images")
 	api := router.Group("/api/v1")
 
