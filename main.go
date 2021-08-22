@@ -34,14 +34,12 @@ func main() {
 	//campaign repo and service layer
 	campaignRepository := campaign.NewRepository(db)
 	campaignService := campaign.NewService(campaignRepository)
-	
-	// create payment service
-	paymentService := payment.NewService()
 
 	// transaction repo and service layer
 	transactionRepository := transaction.NewRepository(db)
+	paymentService := payment.NewService() // create payment service
 	transacrtionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
-	
+
 	// jwt service generator object
 	authService := auth.NewJwtService()
 	
@@ -68,6 +66,7 @@ func main() {
 	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransaction)
 	api.GET("/transactions", authMiddleware(authService, userService), transactionHandler.GetUserTransactions)
 	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
+	api.POST("/transactions/notification", transactionHandler.GetNotification)
 
 	router.Run()
 }
