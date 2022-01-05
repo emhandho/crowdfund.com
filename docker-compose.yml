@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  crowdfund_backend:
+    container_name: crowdfund_backend
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - crowdfund_db
+    networks:
+      - crowdfund_network
+  
+  crowdfund_db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - crowdfund_db:/var/lib/mysql
+    networks:
+      - crowdfund_network
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8000:8080
+    networks:
+      - crowdfund_network
+
+volumes:
+  crowdfund_db:
+    name: crowdfund_db
+    external: true
+
+networks:
+  crowdfund_network:
+    name: crowdfund_network
