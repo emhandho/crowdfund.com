@@ -4,8 +4,15 @@ services:
   crowdfund_backend:
     container_name: crowdfund_backend
     build: .
+    image: cf-backend:v1
+    environment:
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_DATABASE: "${DB_DATABASE}"
+      DB_HOST: "${DB_HOST}"
+      DB_PORT: "${DB_PORT}"
     ports:
-      - 8080:8080
+      - 3030:8080
     depends_on:
       - crowdfund_db
     networks:
@@ -19,10 +26,7 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: "${MYSQL_DATABASE}"
-      MYSQL_USER: "${MYSQL_USER}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
     volumes:
       - crowdfund_db:/var/lib/mysql
     networks:
@@ -38,9 +42,7 @@ services:
 
 volumes:
   crowdfund_db:
-    name: crowdfund_db
-    external: true
 
 networks:
   crowdfund_network:
-    name: crowdfund_network
+    driver: brigde
