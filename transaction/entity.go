@@ -8,15 +8,15 @@ import (
 )
 
 type Transaction struct {
-	ID         int
-	CampaignID int
-	UserID     int
-	Amount     int
-	Status     string
-	Code       string
-	PaymentURL string
+	ID         int    `db:"id"`
+	CampaignID int    `db:"campaign_id"`
+	UserID     int    `db:"user_id"`
+	Amount     int    `db:"amount"`
+	Status     string `db:"status"`
+	Code       string `db:"code"`
+	PaymentURL string `db:"payment_url"`
 	User       user.User
 	Campaign   campaign.Campaign
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	CreatedAt  time.Time `db:"created_at"`
+	UpdatedAt  time.Time `db:"updated_at"`
 }
