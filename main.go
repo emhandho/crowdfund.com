@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"crowdfund.com/auth"
@@ -11,6 +13,7 @@ import (
 	"crowdfund.com/helper"
 	"crowdfund.com/payment"
 	"crowdfund.com/transaction"
+	"github.com/joho/godotenv"
 
 	// "crowdfund.com/transaction"
 	"crowdfund.com/user"
@@ -21,9 +24,30 @@ import (
 	"gorm.io/gorm"
 )
 
-func main() {
-	dsn := "root:admin@tcp(127.0.0.1:3306)/crowdfund_db?charset=utf8mb4&parseTime=True&loc=Local"
+func connection() (*gorm.DB, error) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Printf("Unable to load .env file %v", err)
+	}
+
+	db_user := os.Getenv("MYSQL_USER")
+	db_password := os.Getenv("MYSQL_PASSWORD")
+	db_host := os.Getenv("MYSQL_HOST")
+	db_port := os.Getenv("MYSQL_PORT")
+	db_name := os.Getenv("MYSQL_DATABASE")
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", db_user, db_password, db_host, db_port, db_name)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err.Error())
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func main() {
+	db, err := connection()
 	if err != nil {
 		log.Fatal(err.Error())
 	}

@@ -2,11 +2,12 @@ package auth
 
 import (
 	"errors"
+	"os"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-var SECRET_KEY = []byte("MYCROWDFUNDAPPS_s3cr3tK3y")
+var SECRET_KEY = []byte(os.Getenv("APP_SECRET_KEY"))
 
 type Service interface {
 	GenerateToken(userID int) (string, error)
@@ -16,7 +17,7 @@ type Service interface {
 type jwtService struct {
 }
 
-func NewJwtService() *jwtService{
+func NewJwtService() *jwtService {
 	return &jwtService{}
 }
 
