@@ -11,6 +11,7 @@ services:
       DB_DATABASE: "${DB_DATABASE}"
       DB_HOST: "${DB_HOST}"
       DB_PORT: "${DB_PORT}"
+      APP_SECRET_KEY: "${APP_SECRET_KEY}"
     ports:
       - 3030:8080
     depends_on:
@@ -33,6 +34,7 @@ services:
       - crowdfund_network
   
   adminer:
+    container_name: crowdfund_adminer
     image: adminer
     restart: always
     ports:
@@ -42,6 +44,8 @@ services:
 
 volumes:
   crowdfund_db:
+    name: crowdfund_db
+    external: true
 
 networks:
   crowdfund_network:
