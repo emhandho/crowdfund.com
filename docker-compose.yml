@@ -45,4 +45,4 @@ volumes:
 
 networks:
   crowdfund_network:
-    driver: brigde
+    name: cf_network
