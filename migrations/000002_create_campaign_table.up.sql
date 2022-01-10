@@ -1,5 +1,5 @@
 CREATE TABLE `campaign` (
-    `id` INT(11) PRIMARY KEY NOT NULL,
+    `id` INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `user_id` INT(11) NOT NULL REFERENCES user (id) ON DELETE CASCADE,  
     `name` VARCHAR(255) NOT NULL,
     `short_description` VARCHAR(255) NULL,
