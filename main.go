@@ -66,7 +66,9 @@ func main() {
 	transacrtionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 
 	// jwt service generator object
-	authService := auth.NewJwtService()
+	key := os.Getenv("APP_SECRET_KEY")
+	secret_key := []byte(key)
+	authService := auth.NewJwtService(secret_key)
 
 	// All the Handler for the Entity layer
 	userHandler := handler.NewUserHandler(userService, authService)
