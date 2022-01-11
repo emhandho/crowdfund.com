@@ -1,4 +1,4 @@
-CREATE TABLE `campaign` (
+CREATE TABLE `campaigns` (
     `id` INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `user_id` INT(11) NOT NULL,  
     `name` VARCHAR(255) NOT NULL,
