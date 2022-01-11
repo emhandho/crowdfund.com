@@ -4,7 +4,7 @@ services:
   crowdfund_backend:
     container_name: crowdfund_backend
     build: .
-    image: cf-backend:v1
+    image: crowdfund-backend:v1
     environment:
       DB_USER: "${DB_USER}"
       DB_PASSWORD: "${DB_PASSWORD}"
@@ -49,4 +49,4 @@ volumes:
 
 networks:
   crowdfund_network:
-    name: cf_network
+    name: crowdfund_network
